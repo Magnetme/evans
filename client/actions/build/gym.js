@@ -3,7 +3,7 @@ var log = require('../../logger.js').log;
 
 function Gym(wd) {
 	var gym = {
-		command : "/bin/bash -c 'cd " + wd + " && gym -s \"magnet.me\" --silent | strip-ansi'",
+		command : "/bin/bash -c 'cd " + wd + " && gym -s \"magnet.me\" --silent --use_legacy_build_api | strip-ansi'",
 		log : "",
 		error : "",
 		run : function(callbacks) {
