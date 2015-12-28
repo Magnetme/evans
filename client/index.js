@@ -90,8 +90,20 @@ var handleTask = function(task) {
 	log.info("Requesting action: %s", task.action);
 	switch (task.action){
 		case 'build':
-			log.info("Build action executed.");
+			log.info("Executing build action...");
 			Processes.Requested.build.start(task, function() {
+				finishedTask(task);
+			});
+			break;
+		case 'screenshots':
+			log.info("Executing screenshots action...");
+			Processes.Requested.screenshots.start(task, function() {
+				finishedTask(task);
+			});
+			break;
+		case 'testflight':
+			log.info("Executing testflight action...");
+			Processes.Requested.testflight.start(task, function() {
 				finishedTask(task);
 			});
 			break;

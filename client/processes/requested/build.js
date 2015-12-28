@@ -9,9 +9,6 @@ var log = require('../../logger.js').log;
 var Build = {
 	start : function(task, successCallback) {
 		log.verbose('Build requested.');
-		//var pr_nr = payload.issue.number;
-		//var comment = payload.comment;
-		//var pr_link = "<a href='https://github.com/Magnetme/ios/pull/"+ pr_nr + "'>#"+pr_nr+"</a>";
 
 		var hipMessage = HipChatMessages.BuildMessage("Build started");
 		hipchat.sendMessage(hipMessage);

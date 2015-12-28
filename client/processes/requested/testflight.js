@@ -4,90 +4,81 @@ var Actions = require('../../actions/actions.js');
 var HipChatMessages = require('../../templates/responses/hipchat-messages.js');
 var hipchat = require('../../clients/hipchat/hipchat.js')();
 var github = require('../../clients/github/github.js');
-var GitHubResponses = require('../../templates/responses/github-responses.js');
 var log = require('../../logger.js').log;
 
 var TestFlight = {
-	start : function(payload) {
+	start : function(task, successCallback) {
 		log.verbose('TestFlight submission requested.');
-		var pr_nr = payload.issue.number;
-		var comment = payload.comment;
-		var pr_link = "<a href='https://github.com/Magnetme/ios/pull/"+ pr_nr + "'>#"+pr_nr+"</a>";
 
-		var hipMessage = HipChatMessages.TestFlightMessage("("+pr_link+") Build started by comment <a href='" + comment.html_url + "'>" + comment.id +"</a>.");
+		var hipMessage = HipChatMessages.TestFlightMessage("TestFlight Build started");
 		hipchat.sendMessage(hipMessage);
 
-		log.verbose('Configuring build process.');
+		log.verbose('Configuring testflight process.');
 
-		var branchName = "";
-
-		var retrieveBranch  = new Actions.RetrievePR(payload);
+		var retrieveBranch  = new Actions.RetrievePR(task);
 		var retrieveBuild   = new Actions.Metadata.RetrieveBuildNumber(retrieveBranch.directory);
 		var increaseBuild   = new Actions.Metadata.InreaseBuildNumber(retrieveBranch.directory);
 		var commitEdited    = new Actions.Git.CommitEditedFiles(retrieveBranch.directory);
 		var push            = new Actions.Git.Push(retrieveBranch.directory);
 		var cocoapods       = new Actions.CocoaPods(retrieveBranch.directory);
 		var gym             = new Actions.Gym(retrieveBranch.directory);
-		var pilot             = new Actions.Pilot(retrieveBranch.directory);
+		var pilot           = new Actions.Pilot(retrieveBranch.directory);
 
-		log.verbose('Launching build processes.');
-
+		log.verbose('Launching testflight processes.');
 
 		async.series([
 			function(callback) {
-				github.pullRequests.get({user: 'Magnetme', repo:'ios',number: pr_nr}, function (err,res) {
-					branchName = res.head.ref;
-					callback(err);
-				});
-			},
-			function(callback) {
 				retrieveBranch.run([function(err){
-					var hipMessage = HipChatMessages.TestFlightMessage("("+pr_link+") Branch retrieved.");
+					var hipMessage = HipChatMessages.TestFlightMessage(" Branch retrieved.");
 					hipchat.sendMessage(hipMessage);
 				}, callback], branchName);
 			},
 			function(callback) {
 				retrieveBuild.run([function (err) {
 				}, function(err){
-					var hipMessage = HipChatMessages.TestFlightMessage("("+pr_link+") Detected build number "+retrieveBuild.buildNumber+".");
+					var hipMessage = HipChatMessages.TestFlightMessage("Detected build number "+retrieveBuild.buildNumber+".");
 					hipchat.sendMessage(hipMessage);
 				}, callback]);
 			},
 			function(callback) {
 				increaseBuild.run([function(err){
-					var hipMessage = HipChatMessages.TestFlightMessage("("+pr_link+") Increased build number.");
+					var hipMessage = HipChatMessages.TestFlightMessage("Increased build number.");
 					hipchat.sendMessage(hipMessage);
 				}, callback]);
 			},
 			function(callback) {
 				commitEdited.run([function(err){
-					var hipMessage = HipChatMessages.TestFlightMessage("("+pr_link+") Commited new version.");
+					var hipMessage = HipChatMessages.TestFlightMessage("Commited new version.");
 					hipchat.sendMessage(hipMessage);
 				}, callback], "Magnet.me iOS: Build Number increased to: " + (retrieveBuild.buildNumber +1) + ".");
 			},
 			function(callback) {
 				push.run([function(err){
-					var hipMessage = HipChatMessages.TestFlightMessage("("+pr_link+") Pushed new version.");
+					var hipMessage = HipChatMessages.TestFlightMessage(" Pushed new version.");
 					hipchat.sendMessage(hipMessage);
 				}, callback]);
 			},
 			function(callback) {
 				cocoapods.run([function(err){
-					var hipMessage = HipChatMessages.TestFlightMessage("("+pr_link+") CocoaPods installed.");
+					var hipMessage = HipChatMessages.TestFlightMessage("CocoaPods installed.");
 					hipchat.sendMessage(hipMessage);
 				}, callback]);
 			},
 			function(callback) {
 				gym.run([function(err){
-					var hipMessage = HipChatMessages.TestFlightMessage("("+pr_link+") Build Successful!");
+					var hipMessage = HipChatMessages.TestFlightMessage("Build Successful!");
 					hipchat.sendMessage(hipMessage);
 				}, callback]);
 			},
 			function(callback) {
 				pilot.run([function(err){
-					var hipMessage = HipChatMessages.TestFlightMessage("("+pr_link+") Uploaded a new version to TestFlight. Please release manually when done processing.");
+					var hipMessage = HipChatMessages.TestFlightMessage("Uploaded a new version to TestFlight. Please release manually when done processing.");
 					hipchat.sendMessage(hipMessage);
 				}, callback]);
+			},
+			function(callback) {
+				successCallback();
+				callback()
 			}
 		]);
 	}
