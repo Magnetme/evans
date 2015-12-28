@@ -29,7 +29,6 @@ function RetrievePR(task) {
 			});
 		}
 	};
-
 	return process;
 }
 
