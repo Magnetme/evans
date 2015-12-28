@@ -12,6 +12,9 @@ The clients are build slaves, which continuously check the server for tasks it c
 
 ## Acknowledgements
 
+## License
+Evans is is licensed under an [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0).
+
 ## Contact
 
 
