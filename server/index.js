@@ -1,6 +1,6 @@
 var config = require('./config/config.js');
 var express = require('express');
-var bodyParser = require('body-parser')
+var bodyParser = require('body-parser');
 var app = express();
 var http = require('http');
 var crypto = require('crypto');
