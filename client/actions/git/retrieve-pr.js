@@ -1,4 +1,5 @@
 var exec = require('child_process').exec;
+var log = require('../../logger.js').log;
 
 function RetrievePR(task) {
 	var clone_url = task.clone_url;
@@ -21,6 +22,7 @@ function RetrievePR(task) {
 				if(stdout){
 					process.log += stdout;
 				}
+				log.verbose(process.log);
 				callbacks.forEach(function(callback){
 					callback(err);
 				})

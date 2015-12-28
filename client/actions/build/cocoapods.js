@@ -1,4 +1,5 @@
 var exec = require('child_process').exec;
+var log = require('../../logger.js').log;
 
 function CocoaPods(wd) {
 	var pod = {
@@ -16,6 +17,7 @@ function CocoaPods(wd) {
 				if(stdout){
 					pod.log += stdout;
 				}
+				log.verbose(pod.log);
 
 				callbacks.forEach(function(callback){
 					callback(err);

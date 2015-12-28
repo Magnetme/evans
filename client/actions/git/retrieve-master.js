@@ -1,4 +1,5 @@
 var exec = require('child_process').exec;
+var log = require('../../logger.js').log;
 
 function RetrieveMaster(payload) {
 	var repo_url = payload.repository.ssh_url;
@@ -20,6 +21,7 @@ function RetrieveMaster(payload) {
 				if(stdout){
 					process.log += stdout;
 				}
+				log.verbose(process.log);
 				callbacks.forEach(function(callback){
 					callback(err);
 				})

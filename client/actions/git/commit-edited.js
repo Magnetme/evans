@@ -1,4 +1,5 @@
 var exec = require('child_process').exec;
+var log = require('../../logger.js').log;
 
 function CommitEditedFiles(wd, message) {
 
@@ -18,6 +19,9 @@ function CommitEditedFiles(wd, message) {
 				if(stdout){
 					process.log += stdout;
 				}
+
+				log.verbose(process.log);
+
 				callbacks.forEach(function(callback){
 					callback(err);
 				})

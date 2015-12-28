@@ -1,4 +1,5 @@
 var exec = require('child_process').exec;
+var log = require('../../logger.js').log;
 
 function Snapshot(wd) {
 	var snapshot = {
@@ -17,6 +18,7 @@ function Snapshot(wd) {
 					snapshot.log += stdout;
 				}
 				snapshot.log = snapshot.log.replace(/```/g, "");
+				log.verbose(snapshot.log);
 
 				callbacks.forEach(function(callback){
 					callback(err);

@@ -1,4 +1,5 @@
 var exec = require('child_process').exec;
+var log = require('../../logger.js').log;
 
 function Gym(wd) {
 	var gym = {
@@ -16,6 +17,7 @@ function Gym(wd) {
 				if(stdout){
 					gym.log += stdout;
 				}
+				log.verbose(gym.log);
 
 				callbacks.forEach(function(callback){
 					callback(err);

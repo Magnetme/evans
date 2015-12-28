@@ -1,4 +1,5 @@
 var exec = require('child_process').exec;
+var log = require('../../logger.js').log;
 
 function RetrieveBuildNumber(wd) {
 
@@ -18,6 +19,7 @@ function RetrieveBuildNumber(wd) {
 				if(stdout){
 					process.log += stdout;
 				}
+				log.verbose(process.log);
 				process.buildNumber = parseInt(process.log.trim());
 				callbacks.forEach(function(callback){
 					callback(err);

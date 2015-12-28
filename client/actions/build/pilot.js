@@ -1,4 +1,5 @@
 var exec = require('child_process').exec;
+var log = require('../../logger.js').log;
 
 function Pilot(wd) {
 	var pilot = {
@@ -17,6 +18,7 @@ function Pilot(wd) {
 					pilot.log += stdout;
 				}
 				pilot.log = pilot.log.replace(/```/g, "");
+				log.verbose(pilot.log);
 
 				callbacks.forEach(function(callback){
 					callback(err);
