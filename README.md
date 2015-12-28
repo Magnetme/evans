@@ -6,8 +6,31 @@ The server receives events for build requests and announces them.
 The clients are build slaves, which continuously check the server for tasks it can execute.
 
 ## Installation
+**Clone the repository:**
+```
+git clone https://github.com/Magnetme/evans.git
+```
+**Retrieve Dependencies:**
+```
+npm install && sudo gem install fastlane pilot match gym cocoapods
+```
+**Configure Evans:**
 
+See [#Configuration](#configuration).
+
+**Run Evans Server:**
+```
+cd server && node index.js
+```
+**Run Evans Client:**
+```
+cd client && node index.js
+```
 ## Configuration
+
+### Client
+
+### Server
 
 ## Examples
 
