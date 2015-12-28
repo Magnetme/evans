@@ -25,6 +25,9 @@ var Build = {
 			function(callback) {
 				var hipMessage = HipChatMessages.BuildMessage("Retrieving branch...");
 				hipchat.sendMessage(hipMessage);
+				callback()
+			},
+			function(callback) {
 				retrieveBranch.run([function(err){
 					var hipMessage = HipChatMessages.BuildMessage("Branch retrieved.");
 					hipchat.sendMessage(hipMessage);
@@ -33,6 +36,9 @@ var Build = {
 			function(callback) {
 				var hipMessage = HipChatMessages.BuildMessage("Installing CocoaPods...");
 				hipchat.sendMessage(hipMessage);
+				callback()
+			},
+			function(callback) {
 				cocoapods.run([function(err){
 					var hipMessage = HipChatMessages.BuildMessage("CocoaPods installed.");
 					hipchat.sendMessage(hipMessage);
@@ -41,6 +47,9 @@ var Build = {
 			function(callback) {
 				var hipMessage = HipChatMessages.BuildMessage("Building with gym...");
 				hipchat.sendMessage(hipMessage);
+				callback()
+			},
+			function(callback) {
 				gym.run([function(err){
 					var hipMessage = HipChatMessages.BuildMessage("Gym Build Successful!");
 					hipchat.sendMessage(hipMessage);

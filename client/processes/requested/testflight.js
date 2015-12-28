@@ -30,6 +30,9 @@ var TestFlight = {
 			function(callback) {
 				var hipMessage = HipChatMessages.TestFlightMessage("Retrieving Branch...");
 				hipchat.sendMessage(hipMessage);
+				callback();
+			},
+			function(callback) {
 				retrieveBranch.run([function(err){
 					var hipMessage = HipChatMessages.TestFlightMessage("Branch retrieved.");
 					hipchat.sendMessage(hipMessage);
@@ -38,6 +41,9 @@ var TestFlight = {
 			function(callback) {
 				var hipMessage = HipChatMessages.TestFlightMessage("Retrieving Build Number...");
 				hipchat.sendMessage(hipMessage);
+				callback();
+			},
+			function(callback) {
 				retrieveBuild.run([function (err) {
 				}, function(err){
 					var hipMessage = HipChatMessages.TestFlightMessage("Detected build number "+retrieveBuild.buildNumber+".");
@@ -47,6 +53,9 @@ var TestFlight = {
 			function(callback) {
 				var hipMessage = HipChatMessages.TestFlightMessage("Increasing Build Number...");
 				hipchat.sendMessage(hipMessage);
+				callback();
+			},
+			function(callback) {
 				increaseBuild.run([function(err){
 					var hipMessage = HipChatMessages.TestFlightMessage("Increased build number.");
 					hipchat.sendMessage(hipMessage);
@@ -55,6 +64,9 @@ var TestFlight = {
 			function(callback) {
 				var hipMessage = HipChatMessages.TestFlightMessage("Commiting new version...");
 				hipchat.sendMessage(hipMessage);
+				callback();
+			},
+			function(callback) {
 				commitEdited.run([function(err){
 					var hipMessage = HipChatMessages.TestFlightMessage("Commited new version.");
 					hipchat.sendMessage(hipMessage);
@@ -63,6 +75,9 @@ var TestFlight = {
 			function(callback) {
 				var hipMessage = HipChatMessages.TestFlightMessage("Pushing new version...");
 				hipchat.sendMessage(hipMessage);
+				callback();
+			},
+			function(callback) {
 				push.run([function(err){
 					var hipMessage = HipChatMessages.TestFlightMessage("Pushed new version.");
 					hipchat.sendMessage(hipMessage);
@@ -71,6 +86,9 @@ var TestFlight = {
 			function(callback) {
 				var hipMessage = HipChatMessages.TestFlightMessage("Installing CocoaPods...");
 				hipchat.sendMessage(hipMessage);
+				callback();
+			},
+			function(callback) {
 				cocoapods.run([function(err){
 					var hipMessage = HipChatMessages.TestFlightMessage("CocoaPods installed.");
 					hipchat.sendMessage(hipMessage);
@@ -79,6 +97,9 @@ var TestFlight = {
 			function(callback) {
 				var hipMessage = HipChatMessages.TestFlightMessage("Building with gym...");
 				hipchat.sendMessage(hipMessage);
+				callback();
+			},
+			function(callback) {
 				gym.run([function(err){
 					var hipMessage = HipChatMessages.TestFlightMessage("Gym Build Successful!");
 					hipchat.sendMessage(hipMessage);
@@ -87,6 +108,9 @@ var TestFlight = {
 			function(callback) {
 				var hipMessage = HipChatMessages.TestFlightMessage("Uploading new version to TestFlight...");
 				hipchat.sendMessage(hipMessage);
+				callback();
+			},
+			function(callback) {
 				pilot.run([function(err){
 					var hipMessage = HipChatMessages.TestFlightMessage("Uploaded a new version to TestFlight. Please release manually when done processing.");
 					hipchat.sendMessage(hipMessage);
