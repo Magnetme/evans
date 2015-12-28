@@ -4,6 +4,7 @@ var bodyParser = require('body-parser');
 var app = express();
 var http = require('http');
 var crypto = require('crypto');
+var github = require('./clients/github/github.js');
 
 var createHandler = require('github-webhook-handler');
 var webhook = createHandler(config.Evans.webhook);
@@ -84,7 +85,7 @@ var tasks = [
 		action: "build",
 		branch: "master",
 		commit : "703a2068ffc4b43dfafecc9acf5bc774909ca9d9",
-		clone_url: "git@github.com:Magnetme/ios.git"
+		clone_url: config.Evans.repository.clone_url
 	}
 ];
 
@@ -217,6 +218,80 @@ http.createServer(function (req, res) {
 
 webhook.on('error', function (err) {
 	log.error('Error: %s', err.message)
+});
+
+webhook.on('closed', function (event) {
+	var payload = event.payload;
+	if (payload.hasOwnProperty['pull_request']) {
+		if (payload['pull_request']['merged']) {
+			createNewTask('build', 'master', null);
+		}
+	}
+});
+
+var handleCommentOnPullRequest = function(payload, callback){
+	if (payload.hasOwnProperty("issue")){
+		if (payload.issue.hasOwnProperty("pull_request")) {
+			log.verbose("Scanning comment from ("+payload.comment.html_url+").");
+			callback()
+		}
+	}
+};
+
+var createNewTask = function(action, branch, commit) {
+	var task = {
+		id : crypto.randomBytes(20).toString('hex'),
+		created_on : new Date(),
+		finished_on : null,
+		status : "available",
+		action: action,
+		branch: branch,
+		commit : commit,
+		clone_url: config.Evans.repository.clone_url
+	};
+	log.verbose('Added a new task:\n%s', JSON.stringify(task,null,2));
+	tasks.push(task);
+};
+
+var retrieveBranchFromId = function(id, callback) {
+	github.pullRequests.get({
+		user: 'Magnetme',
+		repo: 'ios',
+		number: id
+	}, function(err, result) {
+		if(err){
+			log.error('There was an error querying the corresponding branch of a given pull request. Error: %s', err);
+			callback(err, null);
+		}
+		callback(null, result.head.ref);
+	});
+};
+
+webhook.on('issue_comment', function (event) {
+	var payload = event.payload;
+	handleCommentOnPullRequest(payload, function() {
+		var comment = payload.comment.body;
+		var evansUsername = config.Evans.githubUsername;
+		switch (comment) {
+			case '@'+evansUsername+' build':
+				retrieveBranchFromId(payload.issue.number, function(err, branch){
+					createNewTask('build', branch, null);
+				});
+				break;
+			case '@'+evansUsername+' screenshots':
+				retrieveBranchFromId(payload.issue.number, function(err, branch){
+					createNewTask('screenshots', branch, null);
+				});
+				break;
+			case '@'+evansUsername+' testflight':
+				retrieveBranchFromId(payload.issue.number, function(err, branch){
+					createNewTask('testflight', branch, null);
+				});
+				break;
+			default:
+				log.verbose('Comment ignored, not directed towards Evans.')
+		}
+	});
 });
 
 webhook.on('*', function (event) {

@@ -39,7 +39,7 @@ var getTaskList = function(callback) {
 		}, function (res, err, body) {
 			log.info('%s', JSON.stringify(body));
 			var tasks = body;
-			body.forEach(function(task){
+			tasks.forEach(function(task){
 				if (task.status=='available') {
 					reserveTask(body[0]['id']);
 					return
