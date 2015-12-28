@@ -23,20 +23,26 @@ var Build = {
 
 		async.series([
 			function(callback) {
+				var hipMessage = HipChatMessages.BuildMessage("Retrieving branch...");
+				hipchat.sendMessage(hipMessage);
 				retrieveBranch.run([function(err){
 					var hipMessage = HipChatMessages.BuildMessage("Branch retrieved.");
 					hipchat.sendMessage(hipMessage);
 				}, callback]);
 			},
 			function(callback) {
+				var hipMessage = HipChatMessages.BuildMessage("Installing CocoaPods...");
+				hipchat.sendMessage(hipMessage);
 				cocoapods.run([function(err){
 					var hipMessage = HipChatMessages.BuildMessage("CocoaPods installed.");
 					hipchat.sendMessage(hipMessage);
 				}, callback]);
 			},
 			function(callback) {
+				var hipMessage = HipChatMessages.BuildMessage("Building with gym...");
+				hipchat.sendMessage(hipMessage);
 				gym.run([function(err){
-					var hipMessage = HipChatMessages.BuildMessage("Build Successful!");
+					var hipMessage = HipChatMessages.BuildMessage("Gym Build Successful!");
 					hipchat.sendMessage(hipMessage);
 				}, callback]);
 			},

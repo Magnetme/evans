@@ -77,20 +77,11 @@ var authenticatedClient = function(req, res) {
 };
 
 var tasks = [
-	{
-		id : crypto.randomBytes(20).toString('hex'),
-		created_on : new Date(),
-		finished_on : null,
-		status : "available",
-		action: "build",
-		branch: "master",
-		commit : "703a2068ffc4b43dfafecc9acf5bc774909ca9d9",
-		clone_url: config.Evans.repository.clone_url
-	}
 ];
 
 app.post('/task', function(req, res){
 	if (authenticatedClient(req, res)) {
+		log.verbose('Client %s requested the task list.', retrieveClientName(req.body['client_id']));
 		res.send(JSON.stringify(tasks));
 	} else {
 		return

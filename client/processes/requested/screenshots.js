@@ -21,12 +21,16 @@ var Screenshots = {
 
 		async.series([
 			function(callback) {
+				var hipMessage = HipChatMessages.BuildMessage("Retrieving branch...");
+				hipchat.sendMessage(hipMessage);
 				retrieveBranch.run([function(err){
 					var hipMessage = HipChatMessages.BuildMessage("Branch retrieved.");
 					hipchat.sendMessage(hipMessage);
 				}, callback]);
 			},
 			function(callback) {
+				var hipMessage = HipChatMessages.BuildMessage("Installing CocoaPods...");
+				hipchat.sendMessage(hipMessage);
 				cocoapods.run([function(err){
 					var hipMessage = HipChatMessages.BuildMessage("CocoaPods installed.");
 					hipchat.sendMessage(hipMessage);
