@@ -1,5 +1,6 @@
 var exec = require('child_process').exec;
 var log = require('../../logger.js').log;
+var config = require('../../config/config.js');
 
 function RetrievePR(task) {
 	var clone_url = task.clone_url;
@@ -7,12 +8,12 @@ function RetrievePR(task) {
 
 	var process = {
 		directory : pr_dir,
-		command : "/bin/bash -c 'mkdir -p "+pr_dir+" && cd "+pr_dir+" && git clone "+clone_url+" . --depth=1 -b ",
+		command : "/bin/bash -c 'mkdir -p "+pr_dir+" && cd "+pr_dir+" && git clone "+clone_url+" . --depth=1 -b "+task.branch+" && git config user.name \""+config.GitHub.name+"\" && git config user.email \""+config.GitHub.email+"\"'",
 		branch : task.branch,
 		log : "",
 		error : "",
 		run : function(callbacks) {
-			exec(this.command+this.branch + "'", function(err, stdout, stderr) {
+			exec(this.command, function(err, stdout, stderr) {
 				if (err) {
 					process.error = err;
 				}

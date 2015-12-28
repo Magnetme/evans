@@ -1,6 +1,6 @@
 function BuildMessage(message) {
 	var buildMessage = {
-		message : "<strong>Magnet.me iOS:</strong> " + message,
+		message : "<strong>Evans:</strong> " + message,
 		color: "gray",
 		notify: false,
 		message_format: "html"

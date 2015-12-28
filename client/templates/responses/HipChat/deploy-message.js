@@ -1,6 +1,6 @@
 function DeployMessage(message) {
 	var deployMessage = {
-		message : "<strong>Magnet.me iOS (Deployment):</strong> " + message,
+		message : "<strong>Evans (Deployment):</strong> " + message,
 		color: "gray",
 		notify: false,
 		message_format: "html"
