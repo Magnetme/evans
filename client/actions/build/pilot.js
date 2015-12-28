@@ -3,7 +3,7 @@ var log = require('../../logger.js').log;
 
 function Pilot(wd) {
 	var pilot = {
-		command : "/bin/bash -c 'cd " + wd + "&& match appstore && pilot upload --skip_submission | strip-ansi'",
+		command : "/bin/bash -c 'cd " + wd + " && pilot upload --skip_submission | strip-ansi'",
 		log : "",
 		error : "",
 		run : function(callbacks) {
