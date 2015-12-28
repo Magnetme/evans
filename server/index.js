@@ -8,7 +8,6 @@ var crypto = require('crypto');
 var createHandler = require('github-webhook-handler');
 var webhook = createHandler(config.Evans.webhook);
 
-var Processes = require('./processes/processes.js');
 var log = require('./logger.js').log;
 
 /**
@@ -203,45 +202,6 @@ http.createServer(function (req, res) {
 
 webhook.on('error', function (err) {
 	log.error('Error: %s', err.message)
-});
-
-webhook.on('closed', function (event) {
-	var payload = event.payload;
-	if (payload.hasOwnProperty['pull_request']) {
-		if (payload['pull_request']['merged']) {
-			Processes.Automated.deployment.start(payload);
-		}
-	}
-});
-
-var handleCommentOnPullRequest = function(payload, callback){
-	if (payload.hasOwnProperty("issue")){
-		if (payload.issue.hasOwnProperty("pull_request")) {
-			log.verbose("Scanning comment from ("+payload.comment.html_url+").");
-			callback()
-		}
-	}
-};
-
-webhook.on('issue_comment', function (event) {
-	var payload = event.payload;
-	handleCommentOnPullRequest(payload, function() {
-		var comment = payload.comment.body;
-		var evansUsername = config.Evans.githubUsername;
-		switch (comment) {
-			case '@'+evansUsername+' build':
-				Processes.Requested.build.start(payload);
-				break;
-			case '@'+evansUsername+' screenshots':
-				Processes.Requested.screenshots.start(payload);
-				break;
-			case '@'+evansUsername+' testflight':
-				Processes.Requested.testflight.start(payload);
-				break;
-			default:
-				log.verbose('Comment ignored, not directed towards Evans.')
-		}
-	});
 });
 
 webhook.on('*', function (event) {
