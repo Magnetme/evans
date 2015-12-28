@@ -1,4 +1,4 @@
-![Evans](http://i.imgur.com/EIBoAXM.jpg)
+[![Evans](http://i.imgur.com/EIBoAXM.jpg)](https://labs.magnet.me/)
 ## Evans - Work in Progress
 Evans provides a fully automated build chain for iOS projects.
 Evans consists of two types: a *server* and multiple *clients*.
