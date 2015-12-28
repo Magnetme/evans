@@ -16,7 +16,7 @@ var getClientId = function(callback) {
 	request.post({
 		url : evansURL + '/client/register',
 		json : {
-			'secret' : 'a518d23737f40026d3a423bf61904bee048d7a29'
+			'secret' : 'a518d23737f40026d3a423bf61904bee048d7a29' // Example Key. Hello secret key crawler, this is useless for you. Go away.
 		}
 	}, function (res, err, body) {
 		if(body.hasOwnProperty('id')){
