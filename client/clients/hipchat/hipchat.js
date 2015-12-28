@@ -4,7 +4,7 @@ var log = require('../../logger.js').log;
 
 function HipChat() {
 	var client = {
-		sendMessage : function(message) {
+		sendMessage : function(message, callback) {
 			log.verbose('Sending message to HipChat.');
 			var url = 'https://api.hipchat.com/v2/room/' + config.HipChat.room +'/notification?auth_token=' + config.HipChat.token;
 			request.post(url, {
@@ -13,6 +13,7 @@ function HipChat() {
 				if(err){
 					log.error(err);
 				}
+				callback()
 			});
 		}
 	};
