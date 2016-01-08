@@ -1,32 +1,47 @@
 var exec = require('child_process').exec;
 var log = require('../../logger.js').log;
 
-function Gym(wd) {
-	var gym = {
+function Process(wd, errorCallback) {
+	var process = {
+		name : 'Gym',
 		command : "/bin/bash -c 'cd " + wd + " && match appstore --verbose && gym -s \"magnet.me\" --silent --use_legacy_build_api | strip-ansi'",
-		log : "",
-		error : "",
+		log : '',
+		error : null,
+		successCheck : function(err, stdout, stderr) {
+			if(process.log.indexOf('Successfully exported and signed the ipa file') > -1) {
+				log.verbose(process.log);
+				log.info(process.name + ' completed successfully.');
+				return true;
+			} else {
+				log.error('The process \'' + process.name + '\' encountered an error.');
+				log.error('Log:\n' + process.log);
+				errorCallback(process.name,process.log);
+				return false;
+			}
+		},
 		run : function(callbacks) {
 			exec(this.command, function(err, stdout, stderr) {
 				if (err) {
-					gym.error = err;
+					process.error = err;
 				}
 				if(stderr){
-					gym.log += stderr;
+					process.log += stderr;
 				}
 				if(stdout){
-					gym.log += stdout;
+					process.log += stdout;
 				}
-				log.verbose(gym.log);
 
-				callbacks.forEach(function(callback){
-					callback(err);
-				})
+				if (process.successCheck(err, stdout, stderr)) {
+					if(callbacks){
+						callbacks.forEach(function(callback){
+							callback(err);
+						});
+					}
+				}
 			});
 		}
 	};
-
-	return gym;
+	return process;
 }
 
-module.exports = Gym;
+module.exports = Process;

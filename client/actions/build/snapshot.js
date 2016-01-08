@@ -1,33 +1,48 @@
 var exec = require('child_process').exec;
 var log = require('../../logger.js').log;
 
-function Snapshot(wd) {
-	var snapshot = {
+function Process(wd, errorCallback) {
+	var process = {
+		name : 'Snapshot',
 		command : "/bin/bash -c 'cd " + wd + " && snapshot | strip-ansi'",
-		log : "",
-		error : "",
+		log : '',
+		error : null,
+		successCheck : function(err, stdout, stderr) {
+			if(process.log.indexOf('Successfully created HTML file') > -1) {
+				log.verbose(process.log);
+				log.info(process.name + ' completed successfully.');
+				return true;
+			} else {
+				log.error('The process \'' + process.name + '\' encountered an error.');
+				log.error('Log:\n' + process.log);
+				errorCallback(process.name,process.log);
+				return false;
+			}
+		},
 		run : function(callbacks) {
 			exec(this.command, function(err, stdout, stderr) {
 				if (err) {
-					snapshot.error = err;
+					process.error = err;
 				}
 				if(stderr){
-					snapshot.log += stderr;
+					process.log += stderr;
 				}
 				if(stdout){
-					snapshot.log += stdout;
+					process.log += stdout;
 				}
-				snapshot.log = snapshot.log.replace(/```/g, "");
-				log.verbose(snapshot.log);
+				process.log = process.log.replace(/```/g, "");
 
-				callbacks.forEach(function(callback){
-					callback(err);
-				})
+				if (process.successCheck(err, stdout, stderr)) {
+					if(callbacks){
+						callbacks.forEach(function(callback){
+							callback(err);
+						});
+					}
+				}
 			});
 		}
 	};
-
-	return snapshot;
+	return process;
 }
 
-module.exports = Snapshot;
+module.exports = Process;

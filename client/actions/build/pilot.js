@@ -1,33 +1,48 @@
 var exec = require('child_process').exec;
 var log = require('../../logger.js').log;
 
-function Pilot(wd) {
-	var pilot = {
+function Process(wd, errorCallback) {
+	var process = {
+		name : 'Pilot',
 		command : "/bin/bash -c 'cd " + wd + " && pilot upload --skip_submission | strip-ansi'",
-		log : "",
-		error : "",
+		log : '',
+		error : null,
+		successCheck : function(err, stdout, stderr) {
+			if(process.log.indexOf('Successfully uploaded the new binary to iTunes Connect') > -1) {
+				log.verbose(process.log);
+				log.info(process.name + ' completed successfully.');
+				return true;
+			} else {
+				log.error('The process \'' + process.name + '\' encountered an error.');
+				log.error('Log:\n' + process.log);
+				errorCallback(process.name,process.log);
+				return false;
+			}
+		},
 		run : function(callbacks) {
 			exec(this.command, function(err, stdout, stderr) {
 				if (err) {
-					pilot.error = err;
+					process.error = err;
 				}
 				if(stderr){
-					pilot.log += stderr;
+					process.log += stderr;
 				}
 				if(stdout){
-					pilot.log += stdout;
+					process.log += stdout;
 				}
-				pilot.log = pilot.log.replace(/```/g, "");
-				log.verbose(pilot.log);
+				process.log = process.log.replace(/```/g, "");
 
-				callbacks.forEach(function(callback){
-					callback(err);
-				})
+				if (process.successCheck(err, stdout, stderr)) {
+					if(callbacks){
+						callbacks.forEach(function(callback){
+							callback(err);
+						});
+					}
+				}
 			});
 		}
 	};
-
-	return pilot;
+	return process;
 }
 
-module.exports = Pilot;
+module.exports = Process;

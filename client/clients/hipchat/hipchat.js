@@ -13,7 +13,9 @@ function HipChat() {
 				if(err){
 					log.error(err);
 				}
-				callback()
+				if (callback) {
+					callback()
+				}
 			});
 		}
 	};

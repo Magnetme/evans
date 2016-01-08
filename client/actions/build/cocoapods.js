@@ -1,32 +1,47 @@
 var exec = require('child_process').exec;
 var log = require('../../logger.js').log;
 
-function CocoaPods(wd) {
-	var pod = {
+function Process(wd, errorCallback) {
+	var process = {
+		name : 'CocoaPods',
 		command : "/bin/bash -c 'cd " + wd + " && pod install | strip-ansi'",
-		log : "",
-		error : "",
+		log : '',
+		error : null,
+		successCheck : function(err, stdout, stderr) {
+			if(process.log.indexOf('Pod installation complete!') > -1) {
+				log.verbose(process.log);
+				log.info(process.name + ' completed successfully.');
+				return true;
+			} else {
+				log.error('The process \'' + process.name + '\' encountered an error.');
+				log.error('Log:\n' + process.log);
+				errorCallback(process.name,process.log);
+				return false;
+			}
+		},
 		run : function(callbacks) {
 			exec(this.command, function(err, stdout, stderr) {
 				if (err) {
-					pod.error = err;
+					process.error = err;
 				}
 				if(stderr){
-					pod.log += stderr;
+					process.log += stderr;
 				}
 				if(stdout){
-					pod.log += stdout;
+					process.log += stdout;
 				}
-				log.verbose(pod.log);
 
-				callbacks.forEach(function(callback){
-					callback(err);
-				})
+				if (process.successCheck(err, stdout, stderr)) {
+					if(callbacks){
+						callbacks.forEach(function(callback){
+							callback(err);
+						});
+					}
+				}
 			});
 		}
 	};
-
-	return pod;
+	return process;
 }
 
-module.exports = CocoaPods;
+module.exports = Process;
