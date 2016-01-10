@@ -258,6 +258,22 @@ var retrieveBranchFromId = function(id, callback) {
 	});
 };
 
+var handleMergedPullRequest = function(payload) {
+	if (payload.hasOwnProperty('action') && payload.hasOwnProperty('pull_request')) {
+		var pull_request = payload['pull_request'];
+		if (payload['action'] == 'closed') {
+			if (pull_request['merged'] == true ) {
+				createNewTask('testflight', 'master', null); // SHA not specified as it should always build HEAD.
+			}
+		}
+	}
+};
+
+webhook.on('pull_request', function (event) {
+	var payload = event.payload;
+	handleMergedPullRequest(payload);
+});
+
 webhook.on('issue_comment', function (event) {
 	var payload = event.payload;
 	handleCommentOnPullRequest(payload, function() {
@@ -272,11 +288,6 @@ webhook.on('issue_comment', function (event) {
 			case '@'+evansUsername+' screenshots':
 				retrieveBranchFromId(payload.issue.number, function(err, branch){
 					createNewTask('screenshots', branch, null);
-				});
-				break;
-			case '@'+evansUsername+' testflight':
-				retrieveBranchFromId(payload.issue.number, function(err, branch){
-					createNewTask('testflight', branch, null);
 				});
 				break;
 			default:

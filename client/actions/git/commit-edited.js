@@ -1,12 +1,24 @@
 var exec = require('child_process').exec;
 var log = require('../../logger.js').log;
 
-function CommitEditedFiles(wd, message) {
-
+function Process(wd, errorCallback) {
 	var process = {
+		name : 'GitCommit',
 		command : "/bin/bash -c 'cd "+wd+" && git commit -asm \"",
-		log : "",
-		error : "",
+		log : '',
+		error : null,
+		successCheck : function(err, stdout, stderr) {
+			if(process.log.indexOf('insertions') > -1) {
+				log.verbose(process.log);
+				log.info(process.name + ' completed successfully.');
+				return true;
+			} else {
+				log.error('The process \'' + process.name + '\' encountered an error.');
+				log.error('Log:\n' + process.log);
+				errorCallback(process.name,process.log);
+				return false;
+			}
+		},
 		run : function(callbacks, message) {
 			var realcommand = this.command + message + "\"'";
 			exec(realcommand, function(err, stdout, stderr) {
@@ -20,16 +32,17 @@ function CommitEditedFiles(wd, message) {
 					process.log += stdout;
 				}
 
-				log.verbose(process.log);
-
-				callbacks.forEach(function(callback){
-					callback(err);
-				})
+				if (process.successCheck(err, stdout, stderr)) {
+					if(callbacks){
+						callbacks.forEach(function(callback){
+							callback(err);
+						});
+					}
+				}
 			});
 		}
 	};
-
 	return process;
 }
 
-module.exports = CommitEditedFiles;
+module.exports = Process;
