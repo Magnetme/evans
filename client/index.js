@@ -7,6 +7,7 @@ var Processes = require('./processes/processes.js');
 var evansURL = 'http://' + config.Evans.host + ":" + config.Evans.port;
 
 var log = require('./logger.js').log;
+var checkDependencies = require('./dependency-check/check-dependencies.js');
 
 var clientId = '';
 
@@ -19,6 +20,10 @@ var getClientId = function(callback) {
 			'secret' : 'a518d23737f40026d3a423bf61904bee048d7a29' // Example Key. Hello secret key crawler, this is useless for you. Go away.
 		}
 	}, function (err, res, body) {
+		if(err){
+			log.error('Client cannot connect to server. Exiting...');
+			process.exit()
+		}
 		if(body.hasOwnProperty('id')){
 			clientId = body['id'];
 			log.info('Retrieved client id: %s.', clientId);
@@ -114,7 +119,11 @@ var handleTask = function(task) {
 	}
 };
 
-async.series([
-	function(callback){getClientId(callback)},
-	function(callback){getTaskList(callback)}
-]);
+checkDependencies(function(passed){
+	if(passed){
+		async.series([
+			function(callback){getClientId(callback)},
+			function(callback){getTaskList(callback)}
+		]);
+	}
+});
