@@ -18,7 +18,7 @@ var getClientId = function(callback) {
 		json : {
 			'secret' : 'a518d23737f40026d3a423bf61904bee048d7a29' // Example Key. Hello secret key crawler, this is useless for you. Go away.
 		}
-	}, function (res, err, body) {
+	}, function (err, res, body) {
 		if(body.hasOwnProperty('id')){
 			clientId = body['id'];
 			log.info('Retrieved client id: %s.', clientId);
@@ -36,12 +36,12 @@ var getTaskList = function(callback) {
 			json : {
 				'client_id' : clientId
 			}
-		}, function (res, err, body) {
+		}, function (err, res, body) {
 			log.info('%s', JSON.stringify(body));
 			var tasks = body;
 			tasks.forEach(function(task){
 				if (task.status=='available') {
-					reserveTask(body[0]['id']);
+					reserveTask(task['id']);
 					return
 				}
 			});
@@ -64,11 +64,13 @@ var reserveTask = function(id) {
 			'id' : id,
 			'client_id' : clientId
 		}
-	}, function (res, err, body) {
-		readyForNewTasks = false;
-		var task = body;
-		log.info('%s', JSON.stringify(task));
-		handleTask(task)
+	}, function (err, res, body) {
+		if(!err){
+			readyForNewTasks = false;
+			var task = body;
+			log.info('%s', JSON.stringify(task));
+			handleTask(task)
+		}
 	});
 };
 
