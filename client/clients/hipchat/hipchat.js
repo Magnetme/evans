@@ -6,7 +6,7 @@ function HipChat() {
 	var client = {
 		sendMessage : function(message, callback) {
 			log.verbose('Sending message to HipChat.');
-			var url = 'https://api.hipchat.com/v2/room/' + config.HipChat.room +'/notification?auth_token=' + config.HipChat.token;
+			var url = 'https://api.hipchat.com/v1/rooms/message?message_format='+message.message_format+'&room_id=' + config.HipChat.room +'&auth_token=' + config.HipChat.token + '&from='+message.from+'&notify=false&format=json&color=' + message.color;
 			request.post(url, {
 				form: message
 			}, function(err, res, body) {

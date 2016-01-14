@@ -61,6 +61,7 @@ var TestFlight = {
 		log.verbose('Launching testflight processes.');
 
 		var releaseId = 0;
+		var newBuildNumber = 0;
 
 		async.series([
 			function(callback) {
@@ -81,6 +82,7 @@ var TestFlight = {
 				retrieveBuild.run([function (err) {
 				}, function(err){
 					var hipMessage = HipChatMessages.TestFlightMessage("Detected build number "+retrieveBuild.buildNumber+".");
+					newBuildNumber = retrieveBuild.buildNumber + 1;
 					hipchat.sendMessage(hipMessage, callback);
 				}]);
 			},
@@ -102,7 +104,7 @@ var TestFlight = {
 				commitEdited.run([function(err){
 					var hipMessage = HipChatMessages.TestFlightMessage("Commited new version.");
 					hipchat.sendMessage(hipMessage, callback);
-				}], "Magnet.me iOS: Build Number increased to: " + (retrieveBuild.buildNumber +1) + ".");
+				}], "Magnet.me iOS: Build Number increased to: " + newBuildNumber + ".");
 			},
 			function(callback) {
 				var hipMessage = HipChatMessages.TestFlightMessage("Pushing new version...");
@@ -148,9 +150,9 @@ var TestFlight = {
 				github.releases.createRelease({
 					owner: 'Magnetme',
 					repo: 'ios',
-					tag_name: ''+retrieveBuild.buildNumber,
+					tag_name: ''+newBuildNumber,
 					tag_commitish: ''+task.branch,
-					name: 'Build ' + retrieveBuild.buildNumber,
+					name: 'Build ' + newBuildNumber,
 					body: 'Auto-generated build by Evans.',
 					prerelease: true
 				}, function(err, result) {

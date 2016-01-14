@@ -1,8 +1,10 @@
+var config = require('../../../config/config.js');
+
 function TestFlightMessage(message) {
 	var hipChatMessage = {
-		message : "<strong>Evans (TestFlight):</strong> " + message,
+		message : "<strong>(" + config.Evans.client_name + ") TestFlight:</strong> " + message,
 		color: "purple",
-		notify: false,
+		from: "Evans",
 		message_format: "html"
 	};
 

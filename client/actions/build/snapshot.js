@@ -4,7 +4,7 @@ var log = require('../../logger.js').log;
 function Process(wd, errorCallback) {
 	var process = {
 		name : 'Snapshot',
-		command : "/bin/bash -c 'cd " + wd + " && snapshot | strip-ansi'",
+		command : "/bin/bash -c 'cd " + wd + " && snapshot --stop_after_first_error --skip_open_summary | strip-ansi'",
 		log : '',
 		error : null,
 		successCheck : function(err, stdout, stderr) {

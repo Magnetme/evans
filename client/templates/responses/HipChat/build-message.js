@@ -1,12 +1,14 @@
+var config = require('../../../config/config.js');
+
 function BuildMessage(message) {
-	var buildMessage = {
-		message : "<strong>Evans:</strong> " + message,
+	var hipChatMessage = {
+		message : "<strong>(" + config.Evans.client_name + ") Build:</strong> " + message,
 		color: "gray",
-		notify: false,
+		from: "Evans",
 		message_format: "html"
 	};
 
-	return buildMessage;
+	return hipChatMessage;
 }
 
 module.exports = BuildMessage;

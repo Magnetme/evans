@@ -1,12 +1,14 @@
+var config = require('../../../config/config.js');
+
 function ErrorMessage(message) {
-	var message = {
-		message : "<strong>Evans:</strong> " + message,
+	var hipChatMessage = {
+		message : "<strong>(" + config.Evans.client_name + ") Error:</strong> " + message,
 		color: "red",
-		notify: false,
+		from: "Evans",
 		message_format: "html"
 	};
 
-	return message;
+	return hipChatMessage;
 }
 
 module.exports = ErrorMessage;

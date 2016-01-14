@@ -207,7 +207,7 @@ log.info('Evans\' Task Management Services are now available at: http://localhos
 
 http.createServer(function (req, res) {
 	webhook(req, res, function (err) {
-		log.warn('Evans was unable to respond to an HTTP request (404) at path \'%s\'.', req['url']);
+		log.warn('Evans was unable to respond to an HTTP request (404) at path \'%s\' on port %s.', req['url'], config.Evans.webhook.port);
 		res.statusCode = 404;
 		res.end('no such location');
 	});
