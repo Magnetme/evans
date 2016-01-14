@@ -3,6 +3,7 @@ MAINTAINER Martin Rogalla
 
 # Export the database, originals dir and the config dir
 RUN mkdir /opt/evans
+RUN mkdir /opt/evans/config
 
 # Evans Server
 EXPOSE 8080
@@ -17,6 +18,7 @@ RUN cd /opt/evans && npm install
 
 # Add the application
 ADD . /opt/evans/
+VOLUME ["/opt/evans/config"]
 
 # Run the entire thing!
 WORKDIR /opt/evans
