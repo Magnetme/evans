@@ -198,7 +198,7 @@ var purgeFinishedTasks = function() {
 
 setTimeout(function() {purgeFinishedTasks()}, 60*60*1000); // 1 hour
 
-app.listen(8888);
+app.listen(config.Evans.port);
 log.info('Evans\' Task Management Services are now available at: http://localhost:%s', config.Evans.port);
 
 /**
