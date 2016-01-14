@@ -1,6 +1,6 @@
 var Config = {
 	Evans : {
-		port : 8888,
+		port : 8080,
 		client_registration : {
 			secrets : { // key - description
 				"xxxxxxxxxxxxxxxxxxxxxxxxxxxx" : "Macbook Pro 15"

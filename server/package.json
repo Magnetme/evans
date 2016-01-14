@@ -1,21 +1,17 @@
 {
   "name": "evans",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "",
-  "main": "./server/index.js",
+  "main": "index.js",
   "dependencies": {
     "async": "^1.5.0",
-    "aws-sdk": "^2.2.21",
     "body-parser": "^1.14.2",
     "express": "^4.13.3",
     "github": "~0.2.4",
     "github-webhook-handler": "^0.5.0",
     "http": "~0.0.0",
     "https": "^1.0.0",
-    "plist": "^1.2.0",
     "request": "^2.67.0",
-    "s3": "^4.4.0",
-    "strip-ansi": "^3.0.0",
     "winston": "^2.1.1"
   },
   "devDependencies": {},

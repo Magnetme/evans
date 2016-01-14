@@ -18,6 +18,12 @@ var log = require('./logger.js').log;
 log.verbose('Initializing Evans server.');
 var clients = [];
 app.use(bodyParser.json());
+
+app.get('/_health', function (req, res) {
+	res.status('200');
+	res.send('OK');
+});
+
 app.post('/client/register', function(req, res){
 	log.verbose('Received a new client registration request.');
 	if (!req.hasOwnProperty("body")) {

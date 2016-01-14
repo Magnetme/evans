@@ -39,7 +39,8 @@ var dependencies = [
 	{
 		name: 'strip-ansi',
 		instructions: 'sudo npm install strip-ansi-cli -g'
-	}];
+	}
+];
 
 var checkForDependency = function(dep, callback) {
 	var command = dep.name;
