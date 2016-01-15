@@ -49,6 +49,7 @@ var Screenshots = {
 		var retrieveBranch  = new Actions.RetrievePR(task, postErrorOnHipChat);
 		var cocoapods       = new Actions.CocoaPods(retrieveBranch.directory, postErrorOnHipChat);
 		var snapshot        = new Actions.Snapshot(retrieveBranch.directory, postErrorOnHipChat);
+		var killSimulator   = new Actions.Processes.Kill('Simulator');
 
 		log.verbose('Launching screenshot processes.');
 
@@ -109,6 +110,8 @@ var Screenshots = {
 						callback()
 					});
 				}]);
+			}, function(callback) {
+				killSimulator.run([callback]);
 			}, function(callback) {
 				successCallback();
 				callback()

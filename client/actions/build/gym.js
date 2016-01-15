@@ -4,7 +4,7 @@ var log = require('../../logger.js').log;
 function Process(wd, errorCallback) {
 	var process = {
 		name : 'Gym',
-		command : "/bin/bash -c 'cd " + wd + " && match appstore --verbose && gym -s \"magnet.me\" --silent --use_legacy_build_api | strip-ansi'",
+		command : "/bin/bash -c 'cd " + wd + " && match appstore --verbose && gym -s \"magnet.me\" --silent | strip-ansi'",
 		log : '',
 		error : null,
 		successCheck : function(err, stdout, stderr) {

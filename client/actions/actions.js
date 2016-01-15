@@ -10,6 +10,8 @@ var RetrieveBuildNumber = require('./metadata/retrieve-build-nr.js');
 var CommitEditedFiles = require('./git/commit-edited.js');
 var Push = require('./git/push.js');
 
+var Kill = require('./processes/kill.js');
+
 var Actions = {
 	RetrievePR : RetrievePR,
 	CocoaPods : CocoaPods,
@@ -23,6 +25,9 @@ var Actions = {
 	Metadata : {
 		InreaseBuildNumber : IncreaseBuildNumber,
 		RetrieveBuildNumber : RetrieveBuildNumber
+	},
+	Processes : {
+		Kill : Kill
 	}
 };
 
