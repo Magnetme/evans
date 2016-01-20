@@ -1,10 +1,11 @@
 var exec = require('child_process').exec;
 var log = require('../../logger.js').log;
+var config = require('../../config/config.js').log;
 
 function Process(wd, errorCallback) {
 	var process = {
 		name : 'Gym',
-		command : "/bin/bash -c 'cd " + wd + " && match appstore --verbose && gym -s \"magnet.me\" --silent | strip-ansi'",
+		command : "/bin/bash -c 'cd " + wd + " && match appstore --verbose && gym -s \"magnet.me\" --use_legacy_build_api --silent --codesigning_identity \""+config.Apple.codesigningIdentity+"\"| strip-ansi'",
 		log : '',
 		error : null,
 		successCheck : function(err, stdout, stderr) {

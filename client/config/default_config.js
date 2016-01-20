@@ -14,6 +14,9 @@ var Config = {
 		accessKeyId: 'xxxxxxxxxxxxxx',
 		secretAccessKey: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
 		region: 'xxxxxxxx'
+	},
+	Apple : {
+		codesigningIdentity: 'iPhone Distribution: XXXXXXXXX (XXXXXXXX)'
 	}
 };
 
