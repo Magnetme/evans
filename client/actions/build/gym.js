@@ -1,6 +1,6 @@
 var exec = require('child_process').exec;
 var log = require('../../logger.js').log;
-var config = require('../../config/config.js').log;
+var config = require('../../config/config.js');
 
 function Process(wd, errorCallback) {
 	var process = {
