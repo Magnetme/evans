@@ -29,7 +29,7 @@ var getClientId = function(callback) {
 			log.info('Retrieved client id: %s.', clientId);
 			callback();
 		} else {
-			log.warning('Error retrieving client id. Reponse:\n%s', body);
+			log.warn('Error retrieving client id. Reponse:\n%s', body);
 		}
 	});
 };
